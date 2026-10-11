@@ -24,7 +24,7 @@ public class OrderService {
     }
 
     /**
-     * 📦 Listar pedidos do usuário logado
+     * 📦 Listar pedidos do usuário logado (com itens).
      */
     public List<Order> findByUserEmail(String email) {
 
@@ -32,7 +32,7 @@ public class OrderService {
             throw new IllegalArgumentException("Usuário não autenticado");
         }
 
-        return orderRepository.findByUserEmail(email);
+        return orderRepository.findByUserEmailWithItems(email);
     }
 
     /**
@@ -108,7 +108,7 @@ public class OrderService {
     }
 
     /**
-     * 🔐 Buscar pedido por ID garantindo que pertence ao usuário
+     * 🔐 Buscar pedido por ID garantindo que pertence ao usuário (com itens).
      */
     public Order findByIdAndUserEmail(Long id, String email) {
 
@@ -117,7 +117,7 @@ public class OrderService {
         }
 
         return orderRepository
-                .findByIdAndUserEmail(id, email)
+                .findByIdWithItemsAndUserEmail(id, email)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
     }
 

@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("default") // só roda no ambiente padrão (dev)
+@Profile("dev") // só roda no ambiente dev
 public class DataLoader implements CommandLineRunner {
 
     private final UserRepository userRepository;
@@ -28,14 +28,23 @@ public class DataLoader implements CommandLineRunner {
         // ADMIN DE TESTE
         // ===============================
 
-        if (userRepository.findByEmail("admin@teste.com").isEmpty()) {
+        var adminOpt = userRepository.findByEmail("admin@teste.com");
+
+        if (adminOpt.isEmpty()) {
 
             User user = new User();
+            user.setName("Admin Teste");
             user.setEmail("admin@teste.com");
             user.setPassword(passwordEncoder.encode("123456"));
-            user.setRole(Role.USER);
+            user.setRole(Role.ADMIN);
 
             userRepository.save(user);
+        } else if (adminOpt.get().getRole() != Role.ADMIN) {
+            // autocorre admin antigo criado com role USER
+            User admin = adminOpt.get();
+            admin.setRole(Role.ADMIN);
+            userRepository.save(admin);
+            System.out.println("✅ Role do admin corrigida para ADMIN");
         }
         // ===============================
         // CLIENTE DE TESTE
@@ -43,6 +52,7 @@ public class DataLoader implements CommandLineRunner {
         if (userRepository.findByEmail("cliente@teste.com").isEmpty()) {
 
             User cliente = new User();
+            cliente.setName("Cliente Teste");
             cliente.setEmail("cliente@teste.com");
             cliente.setPassword(passwordEncoder.encode("123456"));
             cliente.setRole(Role.USER);
