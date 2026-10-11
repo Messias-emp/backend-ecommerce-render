@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: backend-ecommerce-render
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DATABASE_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+    autoDeploy: true
