@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Component
-@Profile("dev") // 🚨 Roda APENAS em ambiente dev
 public class ProductDataLoader implements CommandLineRunner {
 
     private final ProductRepository productRepository;
